@@ -1,0 +1,71 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global Safety Net Default-Deny Catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Reuseable global helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() &&
+             request.auth.token.email == "dalilajaafar@gmx.de" &&
+             request.auth.token.email_verified == true;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Admin identification store rules
+    match /admins/{adminId} {
+      allow read: if isSignedIn() && (resource.data.email == request.auth.token.email || isAdmin());
+      // Only the authentic platform owner can create or update admin slots
+      allow create, update: if isSignedIn() && 
+                            request.auth.token.email == "dalilajaafar@gmx.de" && 
+                            request.auth.token.email_verified == true && 
+                            request.resource.data.email == "dalilajaafar@gmx.de";
+      allow delete: if isAdmin();
+    }
+
+    // Subscriber registrations - Write-once guest entry, read-only admins, activation by guest
+    match /subscribers/{subscriberId} {
+      allow create: if isValidId(subscriberId) && isValidSubscriber(request.resource.data);
+      allow update: if isValidId(subscriberId) && (
+        isAdmin() || 
+        (resource.data.status == "pending" && 
+         request.resource.data.status == "active" && 
+         request.resource.data.firstName == resource.data.firstName && 
+         request.resource.data.lastName == resource.data.lastName && 
+         request.resource.data.email == resource.data.email && 
+         request.resource.data.streetAddress == resource.data.streetAddress && 
+         request.resource.data.postalCode == resource.data.postalCode && 
+         request.resource.data.city == resource.data.city && 
+         request.resource.data.country == resource.data.country && 
+         request.resource.data.birthday == resource.data.birthday && 
+         request.resource.data.createdAt == resource.data.createdAt)
+      );
+      allow read, delete: if isAdmin();
+    }
+
+    function isValidSubscriber(data) {
+      return data.keys().hasAll(['firstName', 'lastName', 'email', 'streetAddress', 'postalCode', 'city', 'country', 'birthday', 'createdAt', 'status'])
+         && data.keys().size() == 10
+         && data.firstName is string && data.firstName.size() > 0 && data.firstName.size() <= 100
+         && data.lastName is string && data.lastName.size() > 0 && data.lastName.size() <= 100
+         && data.email is string && data.email.size() > 0 && data.email.size() <= 120 && data.email.matches('.+@.+')
+         && data.streetAddress is string && data.streetAddress.size() > 0 && data.streetAddress.size() <= 200
+         && data.postalCode is string && data.postalCode.size() > 0 && data.postalCode.size() <= 20
+         && data.city is string && data.city.size() > 0 && data.city.size() <= 100
+         && data.country is string && data.country.size() > 0 && data.country.size() <= 100
+         && data.birthday is string && data.birthday.size() > 0 && data.birthday.size() <= 30
+         && data.createdAt == request.time
+         && data.status in ['active', 'pending', 'cancelled'];
+    }
+  }
+}

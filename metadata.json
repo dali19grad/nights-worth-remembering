@@ -1,0 +1,8 @@
+{
+  "name": "Nights Worth Remembering",
+  "description": "A premium monthly snail mail subscription designed to transform ordinary evenings into memorable, candlelit rituals.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

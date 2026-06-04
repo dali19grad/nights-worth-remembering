@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Allison&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Inter:wght@300;400;500;600;700;800;900&family=Pinyon+Script&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=WindSong:wght@400;500&display=swap');
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'beautifully delicious script';
+  src: local('beautifully delicious script'),
+       local('Beautifully Delicious Script'),
+       local('BeautifullyDelicious-Script'),
+       local('beautyfully delicous script'),
+       local('beautyfully delicous'),
+       local('Beautyfully Delicous Script'),
+       local('Beautifully Delicious');
+}
+
+@font-face {
+  font-family: 'Bondi flf';
+  src: local('Bondi flf'),
+       local('Bondi FLF'),
+       local('BondiFLF'),
+       local('Bodoni flf'),
+       local('Bodoni FLF'),
+       local('BodoniFLF'),
+       local('Bodoni MT'),
+       local('Bodoni SVTYWO Decoupage PSD');
+}
+
+@theme {
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-script: "beautifully delicious script", "beautyfully delicous script", "Beautifully Delicious Script", "WindSong", "Allison", "Pinyon Script", cursive;
+  --font-serif: "Bondi flf", "Bodoni FLF", "Bodoni Moda", "Playfair Display", serif;
+  
+  /* Brand Palette (Warm, Happy, and Harmonious) */
+  --color-brand-black: #FFFDF8;
+  --color-brand-charcoal: #FFF8EE;
+  --color-brand-charcoal-light: #FDF1DD;
+  --color-brand-ivory: #2D2118;
+  --color-brand-cream: #FFF1DF;
+  --color-brand-gray: #7D6756;
+  --color-brand-gray-dark: #4B3C31;
+  --color-brand-seal: #8C1C1C;
+  --color-brand-seal-hover: #630F0F;
+}
+
+/* Candlelight Lounge Mode (Cozy Dark Theme, simulating lights turned off and warm candles lit) */
+.candlelight {
+  --color-brand-black: #0F0A06;
+  --color-brand-charcoal: #1C130E;
+  --color-brand-charcoal-light: #241A14;
+  --color-brand-ivory: #FFF9F2;
+  --color-brand-cream: #1C130E;
+  --color-brand-gray: #A38B7C;
+  --color-brand-gray-dark: #E4D5C5;
+  --color-brand-seal: #B21E1E;
+  --color-brand-seal-hover: #8C1313;
+}
+
+/* Custom Scrollbar and high-end animations */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-brand-black);
+  transition: background-color 1500ms ease;
+}
+::-webkit-scrollbar-thumb {
+  background: #EEDCC4;
+  border-radius: 3px;
+  transition: background-color 1500ms ease;
+}
+.candlelight ::-webkit-scrollbar-thumb {
+  background: #3B2E26;
+}
+::-webkit-scrollbar-thumb:hover,
+.candlelight ::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand-seal);
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: var(--color-brand-black);
+  color: var(--color-brand-ivory);
+}
+
+/* Smooth Global Atmospheric Transition for lighting candles */
+.candlelight-transition,
+.candlelight-transition * {
+  transition: background-color 1500ms cubic-bezier(0.4, 0, 0.2, 1),
+              color 1500ms cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 1500ms cubic-bezier(0.4, 0, 0.2, 1),
+              fill 1500ms cubic-bezier(0.4, 0, 0.2, 1),
+              stroke 1500ms cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 1500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
